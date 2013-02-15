@@ -1,0 +1,166 @@
+A {
+	text-decoration: none;
+	color: black
+}
+
+A:hover {
+	text-decoration: none;
+	color: blue
+}
+
+#contents {
+	font-family: "맑은 고딕", verdana !important;
+	font-size: 12px;
+	margin-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+FONT,P,PRE {
+	font-family: "맑은 고딕", verdana;
+	font-size: 12px;
+	line-height: 1.5em;
+}
+
+INPUT,TEXTAREA,SELECT {
+	font-family: "맑은 고딕", "돋움";
+	font-size: 12px;
+	line-height: 1.3;
+}
+
+.siteBar {
+	height: 29px;
+	padding: 0px;
+	background-image: url("../image/forumHeaderRepeter.png");
+}
+
+.menuBar {
+	height: 30px;
+	padding: 0px;
+	background-image: url("../image/subBack2.gif");
+}
+
+td.header {
+	height: 23px;
+	background-color: #efefef;
+	width: 80px;
+	text-align: center;
+}
+
+input.tagging {
+	width: 20px;
+	padding: 0px;
+}
+
+.link {
+	border: 0px;
+	cursor: pointer;
+}
+
+img.link {
+	border: 0px;
+	cursor: pointer;
+}
+
+img.toList {
+	border: 0px;
+	cursor: pointer;
+}
+
+div.code {
+	border: solid 1px silver;
+	padding: 5px;
+	background-color: #efefef;
+}
+
+.pageLinkUnselected {
+	color: black;
+}
+
+.pageLinkSelected {
+	color: Orange;
+}
+
+.MainMenu {
+	height: 18px;
+	text-align: center;
+	padding-top: 1px;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+.MainMenuSeperator {
+	width: 3px;
+	height: 18px;
+	text-align: center;
+	padding-top: 3px;
+	font-family: verdana;
+	font-size: 10px;
+	color: silver;
+}
+
+.LoginArea {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	z-index: 100;
+	background: white;
+	border: 1px solid #7F9DB9;
+	padding: 1px;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color="silver",
+		Direction=135, Strength=4 ) alpha(Opacity = 90);
+	-moz-opacity: 0.9;
+}
+
+.Head {
+	font-family: "맑은 고딕";
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.ReportCell {
+	padding: 7px;
+	background-color: White;
+}
+
+.MultiTextBox {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.MultiTextBoxDisable {
+	padding: 5px;
+	overflow-x: auto;
+	overflow-y: auto;
+	background-color: Ivory;
+}
+
+.Box {
+	border: solid 1px black;
+	text-align: center;
+}
+
+.WatermarkText {
+	color: Silver;
+}
+
+.ListSection {
+	line-height: 1.5;
+}
+
+/* modalBackground */
+#modalBackground {
+	background-color: #dddddd;
+}
+
+/* modalContainer */
+#modalContainer {
+	font-family: "맑은 고딕";
+	color: #4295C2;
+	height: 100px;
+	width: 200px;
+	text-align: left;
+	background: white;
+	border: 1px solid #336699;
+}

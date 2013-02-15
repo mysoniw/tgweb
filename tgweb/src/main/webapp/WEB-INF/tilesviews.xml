@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+        
+<tiles-definitions>
+
+    <!-- <definition name="loginLayout" template="/WEB-INF/jsp/cup/ubc/login/index.jsp" /> -->
+    
+    <definition name="standardLayout" template="/layouts/standard/standard.jsp">
+        <put-attribute name="top" value="/layouts/standard/top.jsp" />
+        <put-attribute name="menu" value="/layouts/standard/menu.jsp" />
+        <put-attribute name="left" value="/layouts/standard/left.jsp" />
+        <put-attribute name="body" value="/layouts/standard/welcome.jsp" />
+        <put-attribute name="footer" value="/layouts/standard/footer.jsp" />
+    </definition>
+    <definition name="wrapLayout" template="/layouts/standard/wrapStandard.jsp">
+        <put-attribute name="top" value="/layouts/standard/top.jsp" />
+        <put-attribute name="menu" value="/layouts/standard/menu.jsp" />
+        <put-attribute name="left" value="/layouts/standard/left.jsp" />
+        <put-attribute name="body" value="/layouts/standard/welcome.jsp" />
+        <put-attribute name="footer" value="/layouts/standard/footer.jsp" />
+    </definition>
+    
+</tiles-definitions>

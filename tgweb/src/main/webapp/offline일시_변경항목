@@ -1,0 +1,8 @@
+-offline
+~\layouts\standard\footer.jsp	themeswitcher 제거
+~\layouts\standard\header.jsp	google fonts 제거
+
+-배포시 변경사항
+db url 변경
+eptray 폴더 복사
+web.xml spring-security 부분 주석

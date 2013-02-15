@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="SrmDao.findExist" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT TOP 1
+	CPU.TC_IDX AS "CPU"
+	, PROCESS.TC_IDX AS "PROCESS"
+	, MEMORY.TC_IDX AS "MEMORY"
+	, NETWORK.TC_IDX AS "NETWORK"
+	, D_USAGE.TC_IDX AS "DISK_USAGE"
+	, D_IO.TC_IDX AS "DISK_IO"
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_SRM_CPU CPU ON A.TC_IDX = CPU.TC_IDX
+	LEFT OUTER JOIN SQE_SRM_PROCESS PROCESS ON A.TC_IDX = PROCESS.TC_IDX
+	LEFT OUTER JOIN SQE_SRM_MEMORY MEMORY ON A.TC_IDX = MEMORY.TC_IDX
+	LEFT OUTER JOIN SQE_SRM_NETWORK NETWORK ON A.TC_IDX = NETWORK.TC_IDX
+	LEFT OUTER JOIN SQE_SRM_DISK_USAGE D_USAGE ON A.TC_IDX = D_USAGE.TC_IDX
+	LEFT OUTER JOIN SQE_SRM_DISK_IO D_IO ON A.TC_IDX = D_IO.TC_IDX
+WHERE
+	A.TC_IDX = :TC_IDX
+				]]>
+			</statement>
+		</query>
+		<query id="SrmDao.findCPU" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	B.TC_IDX
+	, B.SEQ
+	, B.USAGE
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_SRM_CPU B ON A.TC_IDX = B.TC_IDX
+WHERE
+	A.TC_IDX = :TC_IDX
+				]]>
+			</statement>
+		</query>
+		<query id="SrmDao.findProcess" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	B.TC_IDX
+	, B.SEQ
+	, B.PID
+	, B.STATUS
+	, B.CPU_USAGE
+	, B.MEMORY_USAGE
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_SRM_PROCESS B ON A.TC_IDX = B.TC_IDX
+WHERE
+	A.TC_IDX = :TC_IDX
+ORDER BY
+	B.PID, B.SEQ
+				]]>
+			</statement>
+		</query>
+		<query id="SrmDao.findMemory" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	B.TC_IDX
+	, B.SEQ
+	, B.USAGE
+	, B.MEMORY_TOTAL
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_SRM_MEMORY B ON A.TC_IDX = B.TC_IDX
+WHERE
+	A.TC_IDX = :TC_IDX
+				]]>
+			</statement>
+		</query>
+		<query id="SrmDao.findNetwork" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	B.TC_IDX
+	, B.SEQ
+	, B.IN_TRAFFIC
+	, B.OUT_TRAFFIC
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_SRM_NETWORK B ON A.TC_IDX = B.TC_IDX
+WHERE
+	A.TC_IDX = :TC_IDX
+				]]>
+			</statement>
+		</query>
+		<query id="SrmDao.findDiskUsage" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	B.TC_IDX
+	, B.SEQ
+	, B.USAGE
+	, B.DISK_TOTAL
+	, B.DISK_NAME
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_SRM_DISK_USAGE B ON A.TC_IDX = B.TC_IDX
+WHERE
+	A.TC_IDX = :TC_IDX
+				]]>
+			</statement>
+		</query>
+		<query id="SrmDao.findDiskIO" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	B.TC_IDX
+	, B.SEQ
+	, B.DISK_READ
+	, B.DISK_WRITE
+	, B.DISK_NAME
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_SRM_DISK_IO B ON A.TC_IDX = B.TC_IDX
+WHERE
+	A.TC_IDX = :TC_IDX
+				]]>
+			</statement>
+		</query>
+		<query id="SrmDao.findContextSwitching" mappingStyle="none">
+			<statement>
+				<![CDATA[
+WITH T AS (
+	SELECT 
+		ROW_NUMBER() OVER (ORDER BY TICK_COUNT) AS R
+		, B.TC_IDX
+		, B.PID
+		, B.PNAME
+		, (MAX(B.TICK_COUNT) OVER () - MIN(B.TICK_COUNT) OVER ()) / 200 AS TICK_GAP
+	FROM
+		SQE_TEST_CASE_MASTER A LEFT OUTER JOIN SQE_SRM_CONTEXT_SWITCHING B ON A.TC_IDX = B.TC_IDX
+	WHERE 
+		B.TC_IDX = '7A2CD849176311E2A70A14DAE9EA355F'
+)
+SELECT 
+	GROUP_ID
+	, (GROUP_ID + 1) * TICK_GAP AS TICK_COUNT
+	, TC_IDX
+	, PID
+	, PNAME
+	, DENSE_RANK() OVER (ORDER BY PID) - 1 AS PID_RANK
+	, TICK_GAP
+FROM (
+	SELECT 
+		(R - 1) / TICK_GAP AS GROUP_ID
+		, ROW_NUMBER() OVER (PARTITION BY ((R - 1) / TICK_GAP) ORDER BY COUNT(*) DESC) AS PARTITION_RANK
+		, TC_IDX
+		, PID
+		, PNAME
+		, MAX(TICK_GAP) AS TICK_GAP
+	FROM T
+	GROUP BY ((R - 1) / TICK_GAP), PID
+) A
+WHERE
+	A.PARTITION_RANK = 1
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

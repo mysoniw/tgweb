@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="OSDMainDao.findAll" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT A.*
+FROM (
+	SELECT
+		ROW_NUMBER() OVER(ORDER BY MAX(A.CATEGORY), MAX(A.MODEL), MAX(A.FW_VERSION) DESC) AS ROWNUM
+		, COUNT(1) OVER() AS TOTALCOUNT
+		, MAX(TC_IDX) AS TC_IDX
+		, MAX(A.CATEGORY) AS CATEGORY
+		, MAX(A.MODEL) AS MODEL
+		, MAX(A.FW_VERSION) AS FW_VERSION
+		, MAX(A.TEST_PROJECT_ID) AS TEST_PROJECT_ID
+		, MAX(A.TEST_SUITE_ID) AS TEST_SUITE_ID
+		, SUM(RESULT) AS TEST_CASE_PASS_COUNT
+		, COUNT(TOTAL_CYCLE) - SUM(RESULT) AS TEST_CASE_FAIL_COUNT
+		, COUNT(TOTAL_CYCLE) AS TEST_CASE_COUNT
+		, CAST(ROUND(SUM(RESULT) / CAST(COUNT(TOTAL_CYCLE) AS FLOAT) * 100, 2) AS VARCHAR) + '%' AS PASS_RATE
+	FROM
+		(
+		SELECT
+			MAX(TC_IDX) AS TC_IDX
+			, MAX(A.CATEGORY) AS CATEGORY
+			, MAX(A.MODEL) AS MODEL
+			, MAX(A.FW_VERSION) AS FW_VERSION
+			, MAX(A.TEST_PROJECT_ID) AS TEST_PROJECT_ID
+			, MAX(A.TEST_SUITE_ID) AS TEST_SUITE_ID
+			, CASE WHEN SUM(A.RESULT_INT) > 0 THEN 0 ELSE 1 END AS RESULT
+			, COUNT(A.TEST_CASE_ID) AS TOTAL_CYCLE
+		FROM
+			(
+			SELECT
+				A.TC_IDX
+				, A.CATEGORY
+				, A.MODEL
+				, A.FW_VERSION
+				, CASE RESULT 
+					WHEN 'PASS' THEN 0
+					WHEN 'FAIL' THEN 1
+				END AS RESULT_INT
+				, TEST_PROJECT_ID
+				, TEST_SUITE_ID
+				, TEST_CASE_ID
+			FROM
+				SQE_TEST_CASE_MASTER A LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+			WHERE 
+				TEST_PROJECT_ID = 'OSD'
+				AND B.RESULT <> 'Unknown'
+			#if ($CATEGORY && $CATEGORY != "" && $CATEGORY != "null")
+				AND A.CATEGORY = :CATEGORY
+			#end
+			#if ($MODEL && $MODEL != "" && $MODEL != "null")
+				AND A.MODEL = :MODEL
+			#end
+			#if ($FW_VERSION && $FW_VERSION != "" && $FW_VERSION != "null")
+				AND A.FW_VERSION = :FW_VERSION
+			#end
+			#if ($TEST_SUITE_ID && $TEST_SUITE_ID != "" && $TEST_SUITE_ID != "null")
+				AND A.TEST_SUITE_ID = :TEST_SUITE_ID
+			#end
+		) A
+		WHERE 
+			1 = 1
+		GROUP BY
+			A.CATEGORY, A.MODEL, A.FW_VERSION, A.TEST_SUITE_ID, A.TEST_CASE_ID
+	) A
+	WHERE
+		1 = 1
+	GROUP BY
+		A.CATEGORY, A.MODEL, A.FW_VERSION, A.TEST_SUITE_ID
+) A
+WHERE 
+	1 = 1
+#if (!$loadOnce || $loadOnce == "" || $loadOnce == "null")
+	AND A.ROWNUM BETWEEN (:rows * (:page - 1)) + 1 AND (:rows * :page)
+#end
+ORDER BY "{{sidx}}"
+#if ($sord == "desc")
+	DESC
+#else
+	ASC
+#end
+				]]>
+			</statement>
+		</query>
+		<query id="OSDMainDao.exportExcel" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	MAX(A.TEST_PROJECT_ID) AS "Test Project"
+	, MAX(A.CATEGORY) AS "Category"
+	, MAX(A.MODEL) AS "Model"
+	, MAX(A.FW_VERSION) AS "F/W Version"
+	, MAX(A.TEST_SUITE_ID) AS "Test Suite"
+	, COUNT(TOTAL_CYCLE) AS "Total TC"
+	, SUM(RESULT) AS "PASS"
+	, COUNT(TOTAL_CYCLE) - SUM(RESULT) AS "FAIL"
+	, CAST(ROUND(SUM(RESULT) / CAST(COUNT(TOTAL_CYCLE) AS FLOAT) * 100, 2) AS VARCHAR) + '%' AS "PASS RATE"
+FROM
+	(
+	SELECT
+		MAX(A.CATEGORY) AS CATEGORY
+		, MAX(A.MODEL) AS MODEL
+		, MAX(A.FW_VERSION) AS FW_VERSION
+		, MAX(A.TEST_PROJECT_ID) AS TEST_PROJECT_ID
+		, MAX(A.TEST_SUITE_ID) AS TEST_SUITE_ID
+		, CASE WHEN SUM(A.RESULT_INT) > 0 THEN 0 ELSE 1 END AS RESULT
+		, COUNT(A.TEST_CASE_ID) AS TOTAL_CYCLE
+	FROM
+		(
+		SELECT
+			A.CATEGORY
+			, A.MODEL
+			, A.FW_VERSION
+			, CASE RESULT 
+				WHEN 'PASS' THEN 0
+				WHEN 'FAIL' THEN 1
+			END AS RESULT_INT
+			, TEST_PROJECT_ID
+			, TEST_SUITE_ID
+			, TEST_CASE_ID
+		FROM
+			SQE_TEST_CASE_MASTER A LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+		WHERE 
+			TEST_PROJECT_ID = 'OSD'
+			AND B.RESULT <> 'Unknown'
+		#if ($CATEGORY && $CATEGORY != "" && $CATEGORY != "null")
+			AND A.CATEGORY = :CATEGORY
+		#end
+		#if ($MODEL && $MODEL != "" && $MODEL != "null")
+			AND A.MODEL = :MODEL
+		#end
+		#if ($FW_VERSION && $FW_VERSION != "" && $FW_VERSION != "null")
+			AND A.FW_VERSION = :FW_VERSION
+		#end
+		#if ($TEST_SUITE_ID && $TEST_SUITE_ID != "" && $TEST_SUITE_ID != "null")
+			AND A.TEST_SUITE_ID = :TEST_SUITE_ID
+		#end
+	) A
+	WHERE 
+		1 = 1
+	GROUP BY
+		A.CATEGORY, A.MODEL, A.FW_VERSION, A.TEST_SUITE_ID, A.TEST_CASE_ID
+) A
+WHERE
+	1 = 1
+GROUP BY
+	A.CATEGORY, A.MODEL, A.FW_VERSION, A.TEST_SUITE_ID
+ORDER BY 
+	MAX(A.CATEGORY), MAX(A.MODEL), MAX(A.FW_VERSION) DESC
+				]]>
+			</statement>
+		</query>
+		<query id="OSDTcDao.findAll" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT A.*
+FROM (
+	SELECT
+		ROW_NUMBER() OVER(ORDER BY
+			#if ($filterColumn && $filterColumn != "" && $filterColumn != "null")
+				MAX(A.RESULT_INT) DESC ,
+			#end 
+				MAX(A.CATEGORY)
+				, MAX(A.MODEL)
+				, MAX(A.FW_VERSION) DESC
+				, MAX(A.TEST_CASE_ID)
+		) AS ROWNUM
+		, COUNT(1) OVER() AS TOTALCOUNT
+		, MAX(A.TC_IDX) AS TC_IDX
+		, MAX(A.CATEGORY) AS CATEGORY
+		, MAX(A.MODEL) AS MODEL
+		, MAX(A.FW_VERSION) AS FW_VERSION
+		, MAX(A.TEST_PROJECT_ID) AS TEST_PROJECT_ID
+		, MAX(A.TEST_SUITE_ID) AS TEST_SUITE_ID
+		, A.TEST_CASE_ID
+		, MAX(A.TEST_CASE_NAME) AS TEST_CASE_NAME
+		, CASE WHEN SUM(A.RESULT_INT) > 0 THEN 'FAIL' ELSE 'PASS' END AS RESULT
+		, SUM(A.RESULT_INT) AS FAIL
+		, COUNT(A.TEST_CASE_ID) - SUM(A.RESULT_INT) AS PASS
+		, COUNT(A.TEST_CASE_ID) AS TOTAL_CYCLE
+		, CAST(ROUND((COUNT(A.TEST_CASE_ID) - SUM(A.RESULT_INT)) / CAST(COUNT(A.TEST_CASE_ID) AS FLOAT) * 100, 2) AS VARCHAR) + '%' AS PASS_RATE
+	FROM
+		(
+		SELECT
+			A.TC_IDX
+			, A.CATEGORY
+			, A.MODEL
+			, A.FW_VERSION
+			, CASE RESULT 
+				WHEN 'PASS' THEN 0
+				WHEN 'FAIL' THEN 1
+			END AS RESULT_INT
+			, TEST_PROJECT_ID
+			, A.TEST_SUITE_ID
+			, TEST_CASE_ID
+			, TEST_CASE_NAME
+		FROM
+			SQE_TEST_CASE_MASTER A 
+			LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+		WHERE 
+			TEST_PROJECT_ID = 'OSD'
+			AND B.RESULT <> 'Unknown'
+		#if ($TEST_SUITE_ID && $TEST_SUITE_ID != "" && $TEST_SUITE_ID != "null")
+			AND A.TEST_SUITE_ID = :TEST_SUITE_ID
+		#end
+		#if ($CATEGORY && $CATEGORY != "" && $CATEGORY != "null")
+			AND A.CATEGORY = :CATEGORY
+		#end
+		#if ($MODEL && $MODEL != "" && $MODEL != "null")
+			AND A.MODEL = :MODEL
+		#end
+		#if ($FW_VERSION && $FW_VERSION != "" && $FW_VERSION != "null")
+			AND A.FW_VERSION = :FW_VERSION
+		#end
+	) A
+	WHERE 
+		1 = 1
+	GROUP BY
+		A.TEST_CASE_ID
+) A
+WHERE 
+	1 = 1
+#if (!$loadOnce || $loadOnce == "" || $loadOnce == "null")
+	AND A.ROWNUM BETWEEN (:rows * (:page - 1)) + 1 AND (:rows * :page)
+#end
+ORDER BY "{{sidx}}"
+#if ($sord == "desc")
+	DESC
+#else
+	ASC
+#end
+				]]>
+			</statement>
+		</query>
+		<query id="OSDTcDao.exportExcel" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	MAX(A.TEST_PROJECT_ID) AS "Test Project"
+	, MAX(A.CATEGORY) AS "Category"
+	, MAX(A.MODEL) AS "Model"
+	, MAX(A.FW_VERSION) AS "F/W Version"
+	, MAX(A.TEST_SUITE_ID) AS "Test Suite"
+	, MAX(A.TEST_CASE_NAME) AS "Testcase"
+	, COUNT(A.TEST_CASE_ID) AS "Total Cycle"
+	, CASE WHEN SUM(A.RESULT_INT) > 0 THEN 'FAIL' ELSE 'PASS' END AS "Result"
+	, COUNT(A.TEST_CASE_ID) - SUM(A.RESULT_INT) AS "PASS"
+	, SUM(A.RESULT_INT) AS "FAIL"
+	, CAST(ROUND((COUNT(A.TEST_CASE_ID) - SUM(A.RESULT_INT)) / CAST(COUNT(A.TEST_CASE_ID) AS FLOAT) * 100, 2) AS VARCHAR) + '%' AS "PASS RATE"
+FROM
+	(
+	SELECT
+		A.TC_IDX
+		, A.CATEGORY
+		, A.MODEL
+		, A.FW_VERSION
+		, CASE RESULT 
+			WHEN 'PASS' THEN 0
+			WHEN 'FAIL' THEN 1
+		END AS RESULT_INT
+		, TEST_PROJECT_ID
+		, TEST_SUITE_ID
+		, TEST_CASE_ID
+		, TEST_CASE_NAME
+	FROM
+		SQE_TEST_CASE_MASTER A 
+		LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+	WHERE 
+		TEST_PROJECT_ID = 'OSD'
+		AND B.RESULT <> 'Unknown'
+	#if ($TEST_SUITE_ID && $TEST_SUITE_ID != "" && $TEST_SUITE_ID != "null")
+		AND A.TEST_SUITE_ID = :TEST_SUITE_ID
+	#end
+	#if ($CATEGORY && $CATEGORY != "" && $CATEGORY != "null")
+		AND A.CATEGORY = :CATEGORY
+	#end
+	#if ($MODEL && $MODEL != "" && $MODEL != "null")
+		AND A.MODEL = :MODEL
+	#end
+	#if ($FW_VERSION && $FW_VERSION != "" && $FW_VERSION != "null")
+		AND A.FW_VERSION = :FW_VERSION
+	#end
+	#if ($RESULT && $RESULT != "" && $RESULT != "null")
+		AND B.RESULT = :RESULT
+	#end
+) A
+WHERE 
+	1 = 1
+GROUP BY
+	A.TEST_CASE_ID
+ORDER BY 
+	MAX(A.CATEGORY), MAX(A.MODEL), MAX(A.FW_VERSION) DESC, MAX(A.TEST_CASE_ID)
+				]]>
+			</statement>
+		</query>
+		<query id="OSDCycleDao.findAll" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT A.*
+FROM (
+	SELECT
+		ROW_NUMBER() OVER(ORDER BY
+			#if ($filterColumn && $filterColumn != "" && $filterColumn != "null")
+				RESULT ASC ,
+			#end  
+				A.CYCLE
+		) AS ROWNUM
+		, COUNT(1) OVER() AS TOTALCOUNT
+		, A.TC_IDX
+		, A.CATEGORY
+		, A.MODEL
+		, A.FW_VERSION
+		, A.CYCLE
+		, A.NODE_MAC
+		, A.NODE_IP
+		, RESULT
+		, TEST_PROJECT_ID
+		, A.TEST_SUITE_ID
+		, TEST_CASE_ID
+		, TEST_CASE_NAME
+		, STUFF(ISNULL((SELECT ', ' + LOG_NAME FROM SQE_TC_LOG WHERE TC_IDX = A.TC_IDX GROUP BY LOG_NAME FOR XML PATH (''), TYPE).value('.','VARCHAR(MAX)'), ''), 1, 2, '') AS LOG_FILE
+		, B.CAUSE
+	FROM
+		SQE_TEST_CASE_MASTER A 
+		LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+	WHERE 
+		TEST_PROJECT_ID = 'OSD'
+		AND B.RESULT <> 'Unknown'
+	#if ($CATEGORY && $CATEGORY != "" && $CATEGORY != "null")
+		AND A.CATEGORY = :CATEGORY
+	#end
+	#if ($MODEL && $MODEL != "" && $MODEL != "null")
+		AND A.MODEL = :MODEL
+	#end
+	#if ($FW_VERSION && $FW_VERSION != "" && $FW_VERSION != "null")
+		AND A.FW_VERSION = :FW_VERSION
+	#end
+	#if ($TEST_SUITE_ID && $TEST_SUITE_ID != "" && $TEST_SUITE_ID != "null")
+		AND A.TEST_SUITE_ID = :TEST_SUITE_ID
+	#end
+	#if ($TEST_CASE_ID && $TEST_CASE_ID != "" && $TEST_CASE_ID != "null")
+		AND A.TEST_CASE_ID = :TEST_CASE_ID
+	#end
+) A
+WHERE 
+	1 = 1
+#if (!$loadOnce || $loadOnce == "" || $loadOnce == "null")
+	AND A.ROWNUM BETWEEN (:rows * (:page - 1)) + 1 AND (:rows * :page)
+#end
+ORDER BY "{{sidx}}"
+#if ($sord == "desc")
+	DESC
+#else
+	ASC
+#end
+				]]>
+			</statement>
+		</query>
+		<query id="OSDCycleDao.exportExcel" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	TEST_PROJECT_ID AS "Test Project"
+	, A.CATEGORY AS "Category"
+	, A.MODEL AS "Model"
+	, A.FW_VERSION AS "F/W Version"
+	, A.TEST_SUITE_ID AS "Test Suite"
+	, TEST_CASE_NAME AS "Testcase"
+	, A.NODE_MAC AS "Mac Address"
+	, A.NODE_IP AS "IP"
+	, A.CYCLE AS "Cycle"
+	, RESULT AS "Result"
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+WHERE 
+	TEST_PROJECT_ID = 'OSD'
+	AND B.RESULT <> 'Unknown'
+#if ($CATEGORY && $CATEGORY != "" && $CATEGORY != "null")
+	AND A.CATEGORY = :CATEGORY
+#end
+#if ($MODEL && $MODEL != "" && $MODEL != "null")
+	AND A.MODEL = :MODEL
+#end
+#if ($FW_VERSION && $FW_VERSION != "" && $FW_VERSION != "null")
+	AND A.FW_VERSION = :FW_VERSION
+#end
+#if ($TEST_SUITE_ID && $TEST_SUITE_ID != "" && $TEST_SUITE_ID != "null")
+	AND A.TEST_SUITE_ID = :TEST_SUITE_ID
+#end
+#if ($TEST_CASE_ID && $TEST_CASE_ID != "" && $TEST_CASE_ID != "null")
+	AND A.TEST_CASE_ID = :TEST_CASE_ID
+#end
+#if ($RESULT && $RESULT != "" && $RESULT != "null")
+	AND B.RESULT = :RESULT
+#end
+ORDER BY 
+	A.CYCLE
+				]]>
+			</statement>
+		</query>
+		<query id="OSDDetailDao.findAll" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT A.*
+FROM (
+	SELECT
+		ROW_NUMBER() OVER(ORDER BY A.TC_IDX) AS ROWNUM
+		, COUNT(1) OVER() AS TOTALCOUNT
+		, C.ORACLE_TEXT_ID
+		, C.ORACLE_TEXT
+		, C.CAPTURE_TEXT_ID
+		, C.CAPTURE_TEXT
+		, C.STR_RESULT
+		, C.WIDGET_ID
+		, C.WIDGET_W
+		, C.WIDGET_H
+		, C.STRING_W
+		, C.STRING_H
+		, C.LENGTH_RESULT
+		, C.TOTAL_RESULT
+		, CONVERT(VARCHAR(19), B.START_TIME, 120) AS START_TIME
+		, CONVERT(VARCHAR(19), B.END_TIME, 120) AS END_TIME
+		, CONVERT(VARCHAR(19), B.INSERT_DATE, 120) AS INSERT_DATE
+		, CONVERT(VARCHAR(10), DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)/86400000) + 'Days ' +
+		CONVERT(VARCHAR(10), (DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)%86400000)/3600000) + 'h '+
+		CONVERT(VARCHAR(10), (DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)%3600000)/60000) + 'm '+
+		CONVERT(VARCHAR(10), (DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)%60000)/1000) + 's' AS EXECUTION_TIME
+	FROM
+		SQE_TEST_CASE_MASTER A 
+		LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+		LEFT OUTER JOIN SQE_OSD_RESULT C ON A.TC_IDX = C.TC_IDX
+	WHERE 
+		A.TC_IDX = :TC_IDX
+		--AND C.TOTAL_RESULT = 'FAIL'
+) A
+WHERE 
+	1 = 1
+#if (!$loadOnce || $loadOnce == "" || $loadOnce == "null")
+	AND A.ROWNUM BETWEEN (:rows * (:page - 1)) + 1 AND (:rows * :page)
+#end
+ORDER BY "{{sidx}}"
+#if ($sord == "desc")
+	DESC
+#else
+	ASC
+#end
+				]]>
+			</statement>
+		</query>
+		<query id="OSDDetailDao.exportExcel" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	TEST_PROJECT_ID AS "Test Project"
+	, A.CATEGORY AS "Category"
+	, A.MODEL AS "Model"
+	, A.FW_VERSION AS "F/W Version"
+	, A.TEST_SUITE_ID AS "Test Suite"
+	, TEST_CASE_NAME AS "Testcase"
+	, A.NODE_MAC AS "Mac Address"
+	, A.NODE_IP AS "IP"
+	, A.CYCLE AS "Cycle"
+	, RESULT AS "Result"
+	, B.CAUSE AS "Cause"
+	, C.ORACLE_TEXT_ID AS "Oracle ID"
+	, C.ORACLE_TEXT AS "Oracle String"
+	, C.CAPTURE_TEXT_ID AS "Target ID"
+	, C.CAPTURE_TEXT AS "Target String"
+	, C.STR_RESULT AS "String Result"
+	, C.WIDGET_ID AS "Widget ID"
+	, C.WIDGET_W AS "Widget Width"
+	, C.WIDGET_H AS "Widget Height"
+	, C.STRING_W AS "Text Width"
+	, C.STRING_H AS "Text Height"
+	, C.LENGTH_RESULT AS "Widget Result"
+	, C.TOTAL_RESULT AS "Total Result"
+	, CONVERT(VARCHAR(19), B.START_TIME, 120) AS "Start Time"
+	, CONVERT(VARCHAR(19), B.END_TIME, 120) AS "End Time"
+	, CONVERT(VARCHAR(19), B.INSERT_DATE, 120) AS "Insert Date"
+	, CONVERT(VARCHAR(10), DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)/86400000) + 'Days ' +
+	CONVERT(VARCHAR(10), (DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)%86400000)/3600000) + 'h '+
+	CONVERT(VARCHAR(10), (DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)%3600000)/60000) + 'm '+
+	CONVERT(VARCHAR(10), (DATEDIFF(MILLISECOND, B.START_TIME, B.END_TIME)%60000)/1000) + 's' AS "Execution Time"
+FROM
+	SQE_TEST_CASE_MASTER A 
+	LEFT OUTER JOIN SQE_TC_RESULT B ON A.TC_IDX = B.TC_IDX
+	LEFT OUTER JOIN SQE_OSD_RESULT C ON A.TC_IDX = C.TC_IDX
+WHERE 
+	A.TC_IDX = :TC_IDX
+ORDER BY 
+	A.TC_IDX
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

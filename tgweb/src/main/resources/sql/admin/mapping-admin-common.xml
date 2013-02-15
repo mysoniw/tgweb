@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="AdminCommonDao.select">
+			<statement>
+				<![CDATA[
+SELECT 
+	{{target}} AS ID
+	, {{target}} AS LABEL
+FROM
+	EMP_MASTER
+WHERE 
+	COMPNAME <> ''
+GROUP BY
+	{{target}}
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+        
+<tiles-definitions>
+    <definition name="tgMainResult" extends="standardLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/main/MainResult.jsp" />
+        <put-attribute name="title" value="Main Result" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    
+    <definition name="tgSearchStreamMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/multimedia/searchStream/SearchStreamMain.jsp" />
+        <put-attribute name="title" value="Search Stream" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgLiveStreamMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/multimedia/liveStream/LiveStreamMain.jsp" />
+        <put-attribute name="title" value="Live Stream" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgBandwidthMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/bandwidth/BandwidthMain.jsp" />
+        <put-attribute name="title" value="Bandwidth" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgImageConfirmMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/image/imageConfirm/ImageConfirmMain.jsp" />
+        <put-attribute name="title" value="ImageConfirm" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgViewLatencyMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/image/viewLatency/ViewLatencyMain.jsp" />
+        <put-attribute name="title" value="ViewLatency" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgWebMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/web/WebMain.jsp" />
+        <put-attribute name="title" value="Web Validation" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgRs485Main" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/PTZ/protocol/Rs485Main.jsp" />
+        <put-attribute name="title" value="PTZ Protocol" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgPtzMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/PTZ/command/PtzMain.jsp" />
+        <put-attribute name="title" value="PTZ Command" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgDSTMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/DST/DSTMain.jsp" />
+        <put-attribute name="title" value="DST" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgOSDMain" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/OSD/OSDMain.jsp" />
+        <put-attribute name="title" value="OSD" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    
+    <definition name="tgSearchStreamTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/multimedia/searchStream/SearchStreamTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgLiveStreamTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/multimedia/liveStream/LiveStreamTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgBandwidthTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/bandwidth/BandwidthTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgImageConfirmTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/image/imageConfirm/ImageConfirmTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgViewLatencyTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/image/viewLatency/ViewLatencyTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgWebTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/web/WebTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgRs485Tc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/PTZ/protocol/Rs485Tc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}"/>
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgPtzTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/PTZ/command/PtzTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgDSTTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/DST/DSTTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+    <definition name="tgOSDTc" extends="wrapLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/tg/testItem/OSD/OSDTc.jsp" />
+        <put-attribute name="title" expression="${params.TEST_SUITE_ID}" />
+        <put-attribute name="bodyId" value="body_tg" />
+    </definition>
+</tiles-definitions>

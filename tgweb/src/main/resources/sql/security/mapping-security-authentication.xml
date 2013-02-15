@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="CustomUserDetailsDao.find" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	USER_AUTH
+	, USER_NAME
+	, DEPTNAME
+	, PASSWORD
+	, PREFERENCES
+FROM
+	EMP_MASTER
+WHERE
+	USER_EMAIL = :EP_MAIL
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

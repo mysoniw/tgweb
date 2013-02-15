@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="CommonDao.select">
+			<statement>
+				<![CDATA[
+SELECT 
+	{{target}} AS ID
+	,  {{target}} AS LABEL
+FROM 
+	{{tableName}} 
+WHERE 
+	1 = 1
+#if ($name && $name != "null" && $name != "")
+	AND {{name}} = :value
+#end
+#if ($TEST_PROJECT_ID && $TEST_PROJECT_ID != "null" && $TEST_PROJECT_ID != "")
+	AND TEST_PROJECT_ID = :TEST_PROJECT_ID
+#end
+#if ($MODEL && $MODEL != "null" && $MODEL != "")
+	AND MODEL = :MODEL
+#end
+GROUP BY 
+	{{target}}
+ORDER BY
+	{{target}}
+				]]>
+			</statement>
+		</query>
+		<query id="CommonDao.testSuiteSelect">
+			<statement>
+				<![CDATA[
+SELECT 
+	TEST_SUITE_ID AS ID
+	, TEST_SUITE_NAME AS LABEL
+FROM
+	SQE_TEST_SUITE_MASTER
+WHERE
+	TEST_SUITE_ID IN (
+		SELECT
+			TEST_SUITE_ID
+		FROM 
+			SQE_TEST_CASE_MASTER
+		WHERE
+			1 = 1
+		#if ($TEST_PROJECT_ID && $TEST_PROJECT_ID != "null" && $TEST_PROJECT_ID != "")
+			AND TEST_PROJECT_ID = :TEST_PROJECT_ID
+		#end
+		GROUP BY
+			TEST_SUITE_ID
+	)
+				]]>
+			</statement>
+		</query>
+		<query id="CommonDao.groupSelect">
+			<statement>
+				<![CDATA[
+SELECT 
+	{{target}} AS ID
+	, {{target}} AS LABEL
+FROM
+	SQE_TC_RESULT A INNER JOIN SQE_TEST_CASE_MASTER B ON A.TC_IDX = B.TC_IDX
+WHERE 
+	B.TEST_PROJECT_ID = :TEST_PROJECT_ID
+	AND A.RESULT <> 'Unknown'
+	AND B.TEST_SUITE_ID = :TEST_SUITE_ID
+	AND B.CATEGORY = :CATEGORY
+	AND B.MODEL = :MODEL
+	AND B.FW_VERSION = :FW_VERSION
+	AND {{target}} <> ''
+GROUP BY
+	{{target}}
+				]]>
+			</statement>
+		</query>
+		<query id="LogFileDao.find" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT 
+	LOG_LOCATE AS FULL_PATH
+FROM 
+	SQE_TC_LOG
+WHERE 
+	TC_IDX = :TC_IDX
+	AND LOG_NAME = :LOG_NAME
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

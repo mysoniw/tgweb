@@ -1,0 +1,20 @@
+$.scriptPath = "/javascript";
+$.require("/jquery/widget/topic.js");
+$.require("/jquery/widget/parser.js");
+//$.require("/jquery/widget/form/select.js");
+$.require("/jquery/widget/form/selectmenuWrap.js");
+$.require("/jquery/widget/form/waterMark.js");
+$.require("/jquery/widget/button/excel.js");
+$.require("/jquery/widget/button/search.js");
+$.require("/jquery/widget/button/reset.js");
+$.require("/jquery/widget/button/file.js");
+$.require("/jquery/widget/grid/dataGrid.js");
+$.require("/jquery/widget/util/fixZIndex.js");
+$.require("/jquery/widget/ui/styleTable.js");
+$.require("/jquery/widget/util/imagePreview.js");
+$.require("/jquery/widget/button/formSubmit.js");
+$.require("/jquery/plugin/loupe/jquery.loupe.min.js");
+$.require("/jquery/widget/ui/tabsWraper.js");
+
+$.require("/jquery/widget/ui/accordionLazyLoading.js");
+$.require("/jquery/widget/button/report.js");

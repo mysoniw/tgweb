@@ -1,0 +1,51 @@
+.tabs {
+	/*@ -jquery: $(this).tabsWraper($(this).metadata()); */
+}
+.search {
+	/*@ -jquery: $(this).search($(this).metadata()); */
+}
+.reset {
+	/*@ -jquery: $(this).reset($(this).metadata()); */
+}
+button {
+	/*@ -jquery: $(this).parser($(this).metadata()); */
+}
+/*
+.select {
+	/*@ -jquery: $(this).select($(this).metadata()); */
+/*
+}
+*/
+.grid {
+	/*@ -jquery: $(this).dataGrid($(this).metadata()); */
+}
+.excel { /* dependency : .grid */
+	/*@ -jquery: $(this).excel($(this).metadata()); */
+}
+.file {
+	/*@ -jquery: $(this).file($(this).metadata()); */
+}
+.waterMark {
+	/*@ -jquery: $(this).waterMark($(this).metadata()); */
+}
+.lTable {
+	/*@ -jquery: $(this).styleTable(); */
+}
+.imagePreview {
+	/*@ -jquery: $(this).imagePreview($(this).metadata()); */
+}
+.formSubmit {
+	/*@ -jquery: $(this).formSubmit($(this).metadata()); */
+}
+.loupe {
+	/*@ -jquery: $(this).loupe($(this).metadata()); */
+}
+.select {
+	/*@ -jquery: $(this).selectmenuWrap($(this).metadata()); */
+}
+.accordion {
+	/*@ -jquery: $(this).accordionLazyLoading($(this).metadata()); */
+}
+.report {
+	/*@ -jquery: $(this).report($(this).metadata()); */	
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/security 
+   http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<security:http auto-config="false" use-expressions="true" access-denied-page="/common/deniedpage.jsp" entry-point-ref="authenticationEntryPoint">
+		<security:intercept-url pattern="/admin*.do" access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/trusted/**" filters="none" />
+		<security:intercept-url pattern="/*.do" access="hasRole('ROLE_USER')" />
+		<security:intercept-url pattern="/**" filters="none" />
+
+		<security:logout invalidate-session="true" logout-success-url="/trusted/preLogin.do?method=login" />
+		
+<!-- 	<security:intercept-url pattern="/preAccount.do" filters="none" />
+		<security:form-login login-page="/login.do" authentication-failure-url="/common/error.jsp"/> -->
+		
+		<security:custom-filter ref="authenticationFilter" position="FORM_LOGIN_FILTER"/>
+<!-- 	<security:logout invalidate-session="true" logout-success-url="/krams/auth/login" logout-url="/krams/auth/logout" /> -->
+	</security:http>
+
+ 	<bean id="authenticationEntryPoint"  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint"
+	 	p:loginFormUrl="/trusted/preLogin.do?method=login"/>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider ref="customAuthenticationProvider">
+			<security:password-encoder ref='passwordEncoder'/>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<bean id="customAuthenticationProvider" class="com.techwin.security.CustomAuthenticationProvider">
+		<property name="userDetailsService" ref="customUserDetailsService"/>
+		<property name="hideUserNotFoundExceptions" value="false" />
+	</bean>
+
+	<bean id="customUserDetailsService" class="com.techwin.security.service.CustomUserDetailsService" />
+
+ 	<bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter"
+ 		p:authenticationManager-ref="authenticationManager"
+  		p:authenticationFailureHandler-ref="customAuthenticationFailureHandler"
+  		p:authenticationSuccessHandler-ref="customAuthenticationSuccessHandler">
+		<property name="usernameParameter" value="userId" />
+		<property name="passwordParameter" value="password" />
+	</bean>
+  		
+ 	<bean id="customAuthenticationSuccessHandler" class="com.techwin.security.resultHandler.CustomAuthenticationSuccessHandler"
+ 		p:defaultTargetUrl="/tgMainResult.do?method=l" />
+ 		
+ 	<bean id="customAuthenticationFailureHandler" class="com.techwin.security.resultHandler.CustomAuthenticationFailureHandler">
+ 		<property name="userNotFound" value="/trusted/preLogin.do?method=login&amp;valid=id" />
+ 		<property name="passwordNotMatch" value="/trusted/preLogin.do?method=login&amp;valid=password" />
+ 		<property name="passwordRegistration" value="/preAccount.do?method=registration" />
+ 		<property name="useForward" value="true" />
+ 	</bean>
+ 	
+ 	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+</beans>

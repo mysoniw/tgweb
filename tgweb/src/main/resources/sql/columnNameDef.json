@@ -1,0 +1,244 @@
+{
+	"TEST_PROJECT_ID": "Test Project",
+	"CATEGORY": "Category",
+	"MODEL": "Model",
+	"FW_VERSION": "F/W Version",
+	"TEST_SUITE_ID": "Test Suite",
+	"TEST_CASE_NAME": "Test Case",
+	"SUITE_DESCRIPTION": "Description",
+	"TOTAL_TC": "Total Test Case",
+	"TOTAL_CYCLE": "Total Cycle",
+	"NODE_MAC": "Mac Address",
+	"NODE_IP": "IP",
+	"CYCLE": "Cycle",
+	"RESULT": "Result",
+	"CAUSE": "Cause",
+	"PASS": "Pass",
+	"FAIL": "Fail",
+	"PASS_RATE": "Pass Rate",
+	"NG": "NG",
+	"NG_INT": "NG",
+	"SEQ": "Sequence",
+	"START_TIME": "Start Time",
+	"END_TIME": "End Time",
+	"INSERT_DATE": "Insert Date",
+	"EXECUTION_TIME": "Execution Time",
+	"EXTRA": {
+		"BANDWIDTH": {
+			"NCAM": {
+				"EXTRA1": "Profile Number",
+				"EXTRA2": "Profile Name",
+				"EXTRA3": "Encoding",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA6": "Bitrate",
+				"EXTRA7": "Compression",
+				"EXTRA8": "Bit Control",
+				"EXTRA9": "Encoding Priority",
+				"EXTRA10": "GOP Size",
+				"EXTRA11": "Entropy Coding",
+				"EXTRA12": "Profile"
+			},
+			"NVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA3": "Codec",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate"
+			},
+			"DVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA2": "Quality",
+				"EXTRA4": "Resolution"
+			}
+		},
+		"IMAGE_CONFIRM": {
+			"NCAM": {
+				"EXTRA1": "Profile Number",
+				"EXTRA2": "Profile Name",
+				"EXTRA3": "Encoding",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA6": "Bitrate",
+				"EXTRA7": "Compression",
+				"EXTRA8": "Bit Control",
+				"EXTRA9": "Encoding Priority",
+				"EXTRA10": "GOP Size",
+				"EXTRA11": "Entropy Coding",
+				"EXTRA12": "Profile",
+				"EXTRA13": "Tolerance R",
+				"EXTRA14": "Tolerance G",
+				"EXTRA15": "Tolerance B"
+			},
+			"NVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA3": "Codec",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA13": "Tolerance R",
+				"EXTRA14": "Tolerance G",
+				"EXTRA15": "Tolerance B"
+			},
+			"DVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA2": "Quality",
+				"EXTRA4": "Resolution",
+				"EXTRA13": "Tolerance R",
+				"EXTRA14": "Tolerance G",
+				"EXTRA15": "Tolerance B"
+			}
+		},
+		"VIEW_LATENCY": {
+			"NCAM": {
+				"EXTRA1": "Profile Number",
+				"EXTRA2": "Profile Name",
+				"EXTRA3": "Encoding",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA6": "Bitrate",
+				"EXTRA7": "Compression",
+				"EXTRA8": "Bit Control",
+				"EXTRA9": "Encoding Priority",
+				"EXTRA10": "GOP Size",
+				"EXTRA11": "Entropy Coding",
+				"EXTRA12": "Profile"
+			},
+			"NVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA3": "Codec",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate"
+			},
+			"DVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA2": "Quality",
+				"EXTRA4": "Resolution"
+			}
+		},
+		"SEARCH_STREAM": {
+			"NCAM": {
+				"EXTRA1": "Profile Number",
+				"EXTRA2": "Profile Name",
+				"EXTRA3": "Encoding",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA6": "Bitrate",
+				"EXTRA7": "Compression",
+				"EXTRA8": "Bit Control",
+				"EXTRA9": "Encoding Priority",
+				"EXTRA10": "GOP Size",
+				"EXTRA11": "Entropy Coding",
+				"EXTRA12": "Profile",
+				"EXTRA13": "Frame Count Tolerance",
+				"EXTRA14": "Frame Deviation Tolerance",
+				"EXTRA15": "Frame Deviation Unit",
+				"EXTRA16": "PC Deviation Tolerance",
+				"EXTRA17": "PC Deviation Unit"
+			},
+			"NVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA3": "Codec",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA13": "Frame Count Tolerance",
+				"EXTRA14": "Frame Deviation Tolerance",
+				"EXTRA15": "Frame Deviation Unit",
+				"EXTRA16": "PC Deviation Tolerance",
+				"EXTRA17": "PC Deviation Unit"
+			},
+			"DVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA2": "Quality",
+				"EXTRA3": "Record Mode",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA13": "Frame Count Tolerance",
+				"EXTRA14": "Frame Deviation Tolerance",
+				"EXTRA15": "Frame Deviation Unit",
+				"EXTRA16": "PC Deviation Tolerance",
+				"EXTRA17": "PC Deviation Unit"
+			}
+		},
+		"LIVE_STREAM": {
+			"NCAM": {
+				"EXTRA1": "Profile Number",
+				"EXTRA2": "Profile Name",
+				"EXTRA3": "Encoding",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA6": "Bitrate",
+				"EXTRA7": "Compression",
+				"EXTRA8": "Bit Control",
+				"EXTRA9": "Encoding Priority",
+				"EXTRA10": "GOP Size",
+				"EXTRA11": "Entropy Coding",
+				"EXTRA12": "Profile",
+				"EXTRA13": "Frame Count Tolerance",
+				"EXTRA14": "Frame Deviation Tolerance",
+				"EXTRA15": "Frame Deviation Unit",
+				"EXTRA16": "PC Deviation Tolerance",
+				"EXTRA17": "PC Deviation Unit"
+			},
+			"NVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA3": "Codec",
+				"EXTRA4": "Resolution",
+				"EXTRA5": "Framerate",
+				"EXTRA13": "Frame Count Tolerance",
+				"EXTRA14": "Frame Deviation Tolerance",
+				"EXTRA15": "Frame Deviation Unit",
+				"EXTRA16": "PC Deviation Tolerance",
+				"EXTRA17": "PC Deviation Unit"
+			},
+			"DVR": {
+				"EXTRA1": "Channel Number",
+				"EXTRA2": "Quality",
+				"EXTRA4": "Resolution",
+				"EXTRA13": "Frame Count Tolerance",
+				"EXTRA14": "Frame Deviation Tolerance",
+				"EXTRA15": "Frame Deviation Unit",
+				"EXTRA16": "PC Deviation Tolerance",
+				"EXTRA17": "PC Deviation Unit"
+			}
+		},
+		"DST": {
+			"EXTRA1": "Device Time Zone",
+			"EXTRA2": "Device DST State",
+			"EXTRA3": "Type",
+			"EXTRA4": "Device Set Time",
+			"EXTRA5": "Device DST Time",
+			"EXTRA6": "Device Get Time",
+			"EXTRA7": "Device Tolerance(sec)",
+			"EXTRA8": "PC Set Time",
+			"EXTRA9": "PC DST Time",
+			"EXTRA10": "PC Get Time",
+			"EXTRA11": "PC Tolerance(sec)",
+			"EXTRA12": "Tolerance",
+			"EXTRA13": "PC Time Zone",
+			"EXTRA14": "PC Dst State",
+			"EXTRA15": "Device Start",
+			"EXTRA16": "Device End",
+			"EXTRA17": "PC Start",
+			"EXTRA18": "PC End",
+			"EXTRA19": "Time Difference",
+			"EXTRA20": "Get Time Difference"
+		},
+		"PTZ": {
+			"EXTRA1": "P Max",
+			"EXTRA2": "T Max",
+			"EXTRA3": "Z Max",
+			"EXTRA4": "P Min",
+			"EXTRA5": "T Min",
+			"EXTRA6": "Z Min",
+			"EXTRA7": "P Tolerance",
+			"EXTRA8": "T Tolerance",
+			"EXTRA9": "Z Tolerance"
+		},
+		"RS_485": {
+			"EXTRA1": "Protocol"
+		},
+		"WEB": {
+			"EXTRA1": "Browser Type",
+			"EXTRA2": "Browser Version"
+		}
+	}
+}

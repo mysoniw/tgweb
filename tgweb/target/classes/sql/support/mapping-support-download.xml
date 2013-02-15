@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="DownloadDao.findAll" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT A.*
+FROM (
+	SELECT
+		ROW_NUMBER() OVER(ORDER BY ITEM, VERSION DESC) AS ROWNUM
+		, COUNT(1) OVER() AS TOTALCOUNT 
+		, IDX
+		, CATEGORY
+		, ITEM
+		, VERSION
+		, FILE_DESC
+		, FILE_NAME
+		, SVR_FILE_NAME
+		, CAST(CAST(ROUND(FILE_SIZE / 1024.0, 0) AS INT) AS VARCHAR) + ' kB' AS FILE_SIZE
+		, CONVERT(VARCHAR(19), INSERT_DATE, 120) AS INSERT_DATE
+	FROM
+		SQE_FILE
+) A
+WHERE 
+	1 = 1
+#if (!$loadOnce || $loadOnce == "" || $loadOnce == "null")
+	AND A.ROWNUM BETWEEN (:rows * (:page - 1)) + 1 AND (:rows * :page)
+#end
+ORDER BY {{sidx}}
+#if ($sord == "desc")
+	DESC
+#else
+	ASC
+#end
+				]]>
+			</statement>
+		</query>
+		<query id="DownloadDao.update">
+			<statement>
+				<![CDATA[
+UPDATE
+	SQE_FILE
+SET
+	CATEGORY = :CATEGORY
+	, ITEM = :ITEM
+	, VERSION = :VERSION
+	, FILE_DESC = :FILE_DESC
+#if ($FILE_NAME && $FILE_NAME != "" && $FILE_NAME != "null")
+	, FILE_NAME = :FILE_NAME
+#end
+#if ($SVR_FILE_NAME && $SVR_FILE_NAME != "" && $SVR_FILE_NAME != "null")
+	, SVR_FILE_NAME = :SVR_FILE_NAME
+#end
+#if ($FILE_SIZE && $FILE_SIZE != "" && $FILE_SIZE != "null")
+	, FILE_SIZE = :FILE_SIZE
+#end
+WHERE
+	IDX = :id
+				]]>
+			</statement>
+		</query>
+		<query id="DownloadDao.create">
+			<statement>
+				<![CDATA[
+INSERT INTO SQE_FILE (
+	CATEGORY
+	, ITEM
+	, VERSION
+	, FILE_DESC
+#if ($FILE_NAME && $FILE_NAME != "" && $FILE_NAME != "null")
+	, FILE_NAME
+#end
+#if ($SVR_FILE_NAME && $SVR_FILE_NAME != "" && $SVR_FILE_NAME != "null")
+	, SVR_FILE_NAME
+#end
+	, FILE_SIZE
+	, INSERT_DATE
+) VALUES (
+	:CATEGORY
+	, :ITEM
+	, :VERSION
+	, :FILE_DESC
+#if ($FILE_NAME && $FILE_NAME != "" && $FILE_NAME != "null")
+	, :FILE_NAME
+#end
+#if ($SVR_FILE_NAME && $SVR_FILE_NAME != "" && $SVR_FILE_NAME != "null")
+	, :SVR_FILE_NAME
+#end
+#if ($FILE_SIZE && $FILE_SIZE != "" && $FILE_SIZE != "null")
+	, :FILE_SIZE
+#end
+	, GETDATE()
+)
+				]]>
+			</statement>
+		</query>
+		<query id="DownloadDao.delete">
+			<statement>
+				<![CDATA[
+DELETE 
+FROM 
+	SQE_FILE
+WHERE
+	IDX = :id
+				]]>
+			</statement>
+		</query>
+		<query id="DownloadDao.find" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT 
+	FILE_NAME
+	, SVR_FILE_NAME
+FROM 
+	SQE_FILE
+WHERE 
+	IDX = :IDX
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

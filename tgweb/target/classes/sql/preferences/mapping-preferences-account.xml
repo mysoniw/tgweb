@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="AccountDao.update">
+			<statement>
+				<![CDATA[
+UPDATE
+	EMP_MASTER
+SET
+	PASSWORD = :password
+WHERE
+	USER_EMAIL = :userId
+				]]>
+			</statement>
+		</query>
+		<query id="AccountDao.updatePreferences">
+			<statement>
+				<![CDATA[
+UPDATE
+	EMP_MASTER
+SET
+	PREFERENCES = :preferences
+WHERE
+	USER_EMAIL = :userId
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

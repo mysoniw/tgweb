@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="BoardDao.findAll">
+			<statement>
+				<![CDATA[
+					EXEC UP_SELECT_BOARD ?,?
+				]]>
+			</statement>
+    		<param type="INTEGER" binding="IN" name="pageNo" />
+    		<param type="INTEGER" binding="IN" name="recordSize" />
+		</query>
+		<query id="BoardDao.readCount">
+			<statement>
+				<![CDATA[
+UPDATE
+	SQE_BOARD
+SET
+	READ_COUNT = READ_COUNT + 1
+WHERE 
+	IDX = :idx
+				]]>
+			</statement>
+		</query>
+		<query id="BoardDao.find">
+			<statement>
+				<![CDATA[
+SELECT
+	IDX
+	, THREAD
+	, DEPTH
+	, SUBJECT
+	, CONTENTS
+	, USER_ID
+	, USER_NAME
+	, COMMENT_COUNT
+	, READ_COUNT
+	, USE_HTML
+	, USE_AUTO_BR
+	, DELETED
+	, CONVERT(VARCHAR(19), INSERT_DATE, 120) AS INSERT_DATE
+FROM
+	SQE_BOARD
+WHERE
+	IDX = :idx
+				]]>
+			</statement>
+		</query>
+		<query id="BoardDao.create">
+			<statement>
+				<![CDATA[
+					EXEC UP_INSERT_BOARDNEW ?,?,?,?,?,?,?
+				]]>
+			</statement>
+    		<param type="VARCHAR" binding="IN" name="subject" />
+    		<param type="VARCHAR" binding="IN" name="contents" />
+    		<param type="VARCHAR" binding="IN" name="userId" />
+    		<param type="VARCHAR" binding="IN" name="userName" />
+    		<param type="INTEGER" binding="IN" name="useHtml" />
+    		<param type="INTEGER" binding="IN" name="useAutoBr" />
+    		<param type="INTEGER" binding="OUT" name="idx" />
+		</query>
+		<query id="BoardDao.createReply">
+			<statement>
+				<![CDATA[
+					EXEC UP_INSERT_BOARDREPLY ?,?,?,?,?,?,?,?,?,?
+				]]>
+			</statement>
+    		<param type="INTEGER" binding="IN" name="thread" />
+    		<param type="INTEGER" binding="IN" name="prevThread" />
+    		<param type="INTEGER" binding="IN" name="depth" />
+    		<param type="VARCHAR" binding="IN" name="subject" />
+    		<param type="VARCHAR" binding="IN" name="contents" />
+    		<param type="VARCHAR" binding="IN" name="userId" />
+    		<param type="VARCHAR" binding="IN" name="userName" />
+    		<param type="INTEGER" binding="IN" name="useHtml" />
+    		<param type="INTEGER" binding="IN" name="useAutoBr" />
+    		<param type="INTEGER" binding="OUT" name="idx" />
+		</query>
+		<query id="BoardDao.update">
+			<statement>
+				<![CDATA[
+					EXEC UP_UPDATE_BOARD ?,?,?,?,?
+				]]>
+			</statement>
+    		<param type="INTEGER" binding="IN" name="idx" />
+    		<param type="VARCHAR" binding="IN" name="subject" />
+    		<param type="VARCHAR" binding="IN" name="contents" />
+    		<param type="INTEGER" binding="IN" name="useHtml" />
+    		<param type="INTEGER" binding="IN" name="useAutoBr" />
+		</query>
+		<query id="BoardDao.delete">
+			<statement>
+				<![CDATA[
+UPDATE
+	SQE_BOARD 
+SET
+	DELETED = 1
+WHERE
+	IDX = :idx
+				]]>
+			</statement>
+		</query>
+		<query id="BoardDao.findAllComment">
+			<statement>
+				<![CDATA[
+SELECT
+	IDX
+	, P_IDX
+	, COMMENT
+	, USER_ID
+	, USER_NAME
+	, DELETED
+	, CONVERT(VARCHAR(19), INSERT_DATE, 120) AS INSERT_DATE
+FROM
+	SQE_BOARD_COMMENT
+WHERE
+	P_IDX = :pIdx
+ORDER BY
+	IDX DESC
+				]]>
+			</statement>
+		</query>
+		<query id="BoardDao.createComment">
+			<statement>
+				<![CDATA[
+					EXEC UP_INSERT_BOARD_COMMENTNEW ?,?,?,?
+				]]>
+			</statement>
+    		<param type="VARCHAR" binding="IN" name="pIdx" />
+    		<param type="VARCHAR" binding="IN" name="comment" />
+    		<param type="VARCHAR" binding="IN" name="userId" />
+    		<param type="VARCHAR" binding="IN" name="userName" />
+		</query>
+		<query id="BoardDao.deleteComment">
+			<statement>
+				<![CDATA[
+					EXEC UP_DELETE_BOARD_COMMENT ?,?
+				]]>
+			</statement>
+    		<param type="VARCHAR" binding="IN" name="idx" />
+    		<param type="VARCHAR" binding="IN" name="pIdx" />
+		</query>
+		<query id="BoardDao.fileList">
+			<statement>
+				<![CDATA[
+SELECT
+	IDX
+	, FILE_NAME
+	, SVR_FILE_NAME
+	, FILE_SIZE
+FROM
+	SQE_BOARD_FILE
+WHERE
+	P_IDX = :idx
+ORDER BY
+	IDX DESC
+				]]>
+			</statement>
+		</query>
+		<query id="BoardDao.createFile">
+			<statement>
+				<![CDATA[
+INSERT INTO SQE_BOARD_FILE (
+	P_IDX
+	, FILE_NAME
+	, SVR_FILE_NAME
+	, FILE_SIZE
+) VALUES (
+	:idx
+	, :fileName
+	, :svrFileName
+	, :fileSize
+)
+				]]>
+			</statement>
+		</query>
+		<query id="BoardDao.deleteFile">
+			<statement>
+				<![CDATA[
+DELETE FROM 
+	SQE_BOARD_FILE
+WHERE
+	IDX = :idx
+	AND SVR_FILE_NAME = :svrFileName
+				]]>
+			</statement>
+		</query>
+		<query id="BoardDao.findFile">
+			<statement>
+				<![CDATA[
+SELECT 
+	FILE_NAME
+	, SVR_FILE_NAME
+FROM 
+	SQE_BOARD_FILE
+WHERE 
+	IDX = :idx
+	AND SVR_FILE_NAME = :svrFileName
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

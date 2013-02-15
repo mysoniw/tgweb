@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE queryservice PUBLIC "-//ANYFRAME//DTD QUERYSERVICE//EN" 
+	"http://www.anyframejava.org/dtd/anyframe-core-query-mapping-3.2.dtd">
+<queryservice>
+	<queries>
+		<query id="UserManagementDao.findAll" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT A.*
+FROM (
+	SELECT
+		ROW_NUMBER() OVER(ORDER BY USER_EMPNO) AS ROWNUM
+		, COUNT(1) OVER() AS TOTALCOUNT 
+		, USER_EMPNO
+		, USER_NAME
+		, USER_GRADE
+		, USER_EMAIL
+		, DEPTCODE
+		, DEPTNAME
+		, COMPNAME
+		, USER_AUTH
+	FROM
+		EMP_MASTER
+	WHERE
+		1 = 1
+	#if ($USER_EMPNO && $USER_EMPNO != "" && $USER_EMPNO != "null")
+		AND USER_EMPNO LIKE '%' + :USER_EMPNO + '%'
+	#end
+	#if ($USER_NAME && $USER_NAME != "" && $USER_NAME != "null")
+		AND USER_NAME LIKE '%' + :USER_NAME + '%'
+	#end
+	#if ($USER_GRADE && $USER_GRADE != "" && $USER_GRADE != "null")
+		AND USER_GRADE = :USER_GRADE
+	#end
+	#if ($USER_EMAIL && $USER_EMAIL != "" && $USER_EMAIL != "null")
+		AND USER_EMAIL LIKE '%' + :USER_EMAIL + '%'
+	#end
+	#if ($DEPTNAME && $DEPTNAME != "" && $DEPTNAME != "null")
+		AND DEPTNAME = :DEPTNAME
+	#end
+	#if ($COMPNAME && $COMPNAME != "" && $COMPNAME != "null")
+		AND COMPNAME = :COMPNAME
+	#end
+) A
+WHERE 
+	1 = 1
+#if (!$loadOnce || $loadOnce == "" || $loadOnce == "null")
+	AND A.ROWNUM BETWEEN (:rows * (:page - 1)) + 1 AND (:rows * :page)
+#end
+ORDER BY "{{sidx}}"
+#if ($sord == "desc")
+	DESC
+#else
+	ASC
+#end
+				]]>
+			</statement>
+		</query>
+		<query id="UserManagementDao.exportExcel" mappingStyle="none">
+			<statement>
+				<![CDATA[
+SELECT
+	USER_EMPNO AS "사번"
+	, USER_NAME AS "이름"
+	, USER_GRADE AS "직위"
+	, USER_EMAIL AS "e-mail"
+	, COMPNAME AS "회사명"
+	, DEPTNAME AS "부서명"
+	, DEPTCODE AS "부서code"
+	, USER_AUTH AS "등급"
+FROM
+	EMP_MASTER
+WHERE
+	1 = 1
+#if ($USER_EMPNO && $USER_EMPNO != "" && $USER_EMPNO != "null")
+	AND USER_EMPNO LIKE '%' + :USER_EMPNO + '%'
+#end
+#if ($USER_NAME && $USER_NAME != "" && $USER_NAME != "null")
+	AND USER_NAME LIKE '%' + :USER_NAME + '%'
+#end
+#if ($USER_GRADE && $USER_GRADE != "" && $USER_GRADE != "null")
+	AND USER_GRADE = :USER_GRADE
+#end
+#if ($USER_EMAIL && $USER_EMAIL != "" && $USER_EMAIL != "null")
+	AND USER_EMAIL LIKE '%' + :USER_EMAIL + '%'
+#end
+#if ($DEPTNAME && $DEPTNAME != "" && $DEPTNAME != "null")
+	AND DEPTNAME = :DEPTNAME
+#end
+#if ($COMPNAME && $COMPNAME != "" && $COMPNAME != "null")
+	AND COMPNAME = :COMPNAME
+#end
+				]]>
+			</statement>
+		</query>
+		<query id="UserManagementDao.checkDuplication">
+			<statement>
+				<![CDATA[
+SELECT
+	1 AS "RESULT"
+FROM
+	EMP_MASTER
+WHERE
+	USER_EMAIL = :email
+				]]>
+			</statement>
+		</query>
+		<query id="UserManagementDao.update">
+			<statement>
+				<![CDATA[
+UPDATE
+	EMP_MASTER
+SET
+	USER_EMPNO = :USER_EMPNO
+	, USER_NAME = :USER_NAME
+	, USER_GRADE = :USER_GRADE
+	, USER_EMAIL = LTRIM(RTRIM(:USER_EMAIL))
+	, DEPTCODE = LTRIM(RTRIM(:DEPTCODE))
+	, DEPTNAME = :DEPTNAME
+	, COMPNAME = :COMPNAME
+	, USER_AUTH = :USER_AUTH
+WHERE
+	USER_EMAIL = :id
+				]]>
+			</statement>
+		</query>
+		<query id="UserManagementDao.create">
+			<statement>
+				<![CDATA[
+INSERT INTO EMP_MASTER (
+	USER_EMPNO
+	, USER_NAME
+	, USER_GRADE
+	, USER_EMAIL
+	, DEPTCODE
+	, DEPTNAME
+	, COMPNAME
+	, USER_AUTH
+)VALUES (
+	:USER_EMPNO
+	, :USER_NAME
+	, :USER_GRADE
+	, LTRIM(RTRIM(:USER_EMAIL))
+	, LTRIM(RTRIM(:DEPTCODE))
+	, :DEPTNAME
+	, :COMPNAME
+	, :USER_AUTH
+)
+				]]>
+			</statement>
+		</query>
+		<query id="UserManagementDao.delete">
+			<statement>
+				<![CDATA[
+DELETE 
+FROM 
+	EMP_MASTER
+WHERE
+	USER_EMAIL = :id
+				]]>
+			</statement>
+		</query>
+	</queries>
+</queryservice>

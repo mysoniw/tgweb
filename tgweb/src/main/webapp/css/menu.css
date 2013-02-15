@@ -1,0 +1,90 @@
+.menu {
+	width: 100%;
+	height: 40px;
+	font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	z-index: 100000;
+	background:#FFFFFF;
+	-khtml-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
+}
+.menu ul  {
+	margin: 0px;
+	padding: 0px;
+}
+.menu ul li {
+	border-bottom: 1px solid #CCCCCC;
+	float: left;
+	height: 30px;
+	display: block;
+	position: relative;
+	margin:5px 15px 5px 15px;
+}
+.menu li .hover {
+	position: absolute;
+	background-color: #9E0039;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	height: 30px;
+	display: none;
+	-khtml-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
+}
+.menu li a {
+	display: block;
+	font-family: Ubuntu Condensed, Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 15px;
+	color: #9E0039;
+	text-decoration: none;
+	padding: 7px 15px 13px 15px;
+	position: relative;
+}
+.menu ul li ul {
+	width: 200px;
+	position: absolute;
+	display: none;
+	top: 32px;
+	padding: 1px 0 0 0;
+	border-left: 1px solid #CDCDCD;
+	border-top: 1px solid #CDCDCD;
+	border-bottom: 1px solid #AAAAAA;
+	border-right: 1px solid #AAAAAA;
+	background: #FFFFFF;
+	-khtml-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
+}
+.menu ul li:hover ul {
+/*	display: block; */
+}
+.menu ul li ul li {
+	border-bottom: 1px solid #CCCCCC;
+	display: block;
+	width: 190px;
+	padding: 0px;
+	margin: 0px;
+	z-index: 1000;
+	position: relative;
+	margin: 5px 5px 5px 5px;
+}
+.menu ul li ul li a {
+	display: block;
+	color: #9E0039;
+	font-family: Ubuntu Condensed, Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 14px;
+	padding: 5px 23px 13px 18px;
+	position: relative;
+	text-decoration: none;
+}
+
+
+.menu ul li ul li ul {
+	display: none;
+	margin-left: 15.8em;
+	margin-top: -3em;
+}
+
+.menu ul li ul a.parent {
+    background: url(/images/common/arrow.png) no-repeat 90% 35%;
+}
+
+
+#body_home li#nav_home, #body_tg li#nav_tg, #body_sup li#nav_sup, #body_admin li#nav_admin {
+	border-bottom: 1px solid #FF0000;
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+        
+<tiles-definitions>
+    <definition name="adminUserManagement" extends="standardLayout">
+        <put-attribute name="body" value="/WEB-INF/jsp/admin/management/UserManagement.jsp" />
+        <put-attribute name="title" value="사용자 관리" />
+        <put-attribute name="bodyId" value="body_admin" />
+    </definition>
+</tiles-definitions>
